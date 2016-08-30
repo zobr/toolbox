@@ -11,7 +11,7 @@ class Session {
      */
     public function authenticate(callable $onFailure = null) {
         $self = $this;
-        return function ($req, $res, $next) use ($self) {
+        return function ($req, $res, $next) use ($self, $onFailure) {
             // Authenticate
             if ($self->isAuthenticated()) {
                 return $next($req, $res);
