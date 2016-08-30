@@ -26,8 +26,9 @@ class Config {
      * @param string $configDir Directory for configuration files.
      */
     public function __construct(string $configDir) {
+        $configDir = realpath($configDir);
         $this->env = getenv('APP_ENV') ? getenv('APP_ENV') : 'local';
-        $this->configs['default'] = require $this->configDir . '/default.php';
+        $this->configs['default'] = require $configDir . '/default.php';
         // Add an environment specific config
         $envConfig = $configDir . '/' . $this->env . '.php';
         if (file_exists($envConfig)) {
