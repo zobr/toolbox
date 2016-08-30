@@ -12,7 +12,7 @@ class Sequence {
 
     private $collection;
 
-    public function __construct(Mongo $mongo) {
+    public function __construct(Database $mongo) {
         $this->collection = $mongo->getCollection('sequences');
     }
 
