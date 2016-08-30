@@ -6,7 +6,7 @@ use DateTime;
 use MongoDB\BSON\ObjectID;
 use MongoDB\BSON\UTCDatetime;
 use MongoDB\Model\BSONArray;
-use Zobr\Toolbox\Entity as BaseEntity
+use Zobr\Toolbox\Entity as BaseEntity;
 
 abstract class Entity extends BaseEntity {
 
