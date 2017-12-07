@@ -26,12 +26,12 @@ abstract class Repository extends BaseRepository {
      * @return void
      */
     public function rebuildIndex() {
-
     }
 
     /**
      * Find entities matching criteria
      * @param  array $criteria
+     * @param  array $options
      * @return Entity[]
      */
     public function find(array $criteria = [], array $options = []) {
@@ -49,6 +49,7 @@ abstract class Repository extends BaseRepository {
     /**
      * Find one entity matching criteria
      * @param  array $criteria
+     * @param  array $options
      * @return Entity|null
      */
     public function findOne(array $criteria = [], array $options = []) {
@@ -64,14 +65,30 @@ abstract class Repository extends BaseRepository {
     }
 
     /**
+     * Counts entities matching criteria
+     * @param  array $criteria
+     * @param  array $options
+     * @return int
+     */
+    public function count(array $criteria = [], array $options = []) {
+        return $this->collection->count($criteria, $options);
+    }
+
+    /**
      * Get one entity by _id
      * @param  ObjectID|string $id
      * @return Entity|null
      */
     public function getById($id) {
-        return $this->findOne([
-            '_id' => new ObjectID((string) $id),
-        ]);
+        return $this->ensureIdentity($id, function () use ($id) {
+            $doc = $this->collection->findOne([
+                '_id' => new ObjectID((string) $id),
+            ]);
+            if (!$doc) {
+                return null;
+            }
+            return $this->make()->fromMongoDocument($doc);
+        });
     }
 
     /**

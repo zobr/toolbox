@@ -54,12 +54,24 @@ class MessageBag {
     }
 
     /**
+     * Check if this message bag has a message in current namespace
+     * @return boolean
+     */
+    public function has($message) {
+        foreach ($this->all() as $x) {
+            if ($x === $message) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Get first message in current namespace
      * @return string|null
      */
     public function first() {
-        $all = $this->all();
-        return count($all) > 0 ? $all[0] : null;
+        return $this->all()[0] ?? null;
     }
 
     /**

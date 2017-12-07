@@ -10,13 +10,13 @@ class Database {
      * Selected MongoDB database
      * @var \MongoDB\Database
      */
-    public $db;
+    private $db;
 
     /**
      * MongoDB client
      * @var Client
      */
-    public $client;
+    private $client;
 
     public function __construct($uri, $database) {
         $this->client = new Client($uri);
@@ -30,6 +30,14 @@ class Database {
      */
     public function getCollection($name) {
         return $this->db->{$name};
+    }
+
+    /**
+     * Returns the database
+     * @return \MongoDB\Database
+     */
+    public function getDatabase() {
+        return $this->db;
     }
 
 }

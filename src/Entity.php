@@ -75,7 +75,15 @@ abstract class Entity {
         $to_array = function ($self) {
             return get_object_vars($self);
         };
-        return $to_array($this);
+        $array = $to_array($this);
+        foreach ($array as $i => $value) {
+            // Unset null fields
+            if (is_null($value)) {
+                unset($array[$i]);
+                continue;
+            }
+        }
+        return $array;
     }
 
     /**

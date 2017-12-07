@@ -49,7 +49,9 @@ abstract class Repository {
             // Automatic via a simple factory
             $entity = $this->make();
         }
-        $this->identityMap[(string) $id] = $entity;
+        if ($entity) {
+            $this->identityMap[(string) $id] = $entity;
+        }
         return $entity;
     }
 

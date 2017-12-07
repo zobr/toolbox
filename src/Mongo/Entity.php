@@ -7,6 +7,7 @@ use MongoDB\BSON\ObjectID;
 use MongoDB\BSON\UTCDatetime;
 use MongoDB\Model\BSONArray;
 use Zobr\Toolbox\Entity as BaseEntity;
+use Zobr\Toolbox\Perf\Profiler;
 
 abstract class Entity extends BaseEntity {
 
@@ -58,11 +59,6 @@ abstract class Entity extends BaseEntity {
     public function toMongoDocument() {
         $doc = $this->toArray();
         foreach ($doc as $i => $value) {
-            // Unset null fields
-            if (is_null($value)) {
-                unset($doc[$i]);
-                continue;
-            }
             // Convert _id into ObjectID
             if ($i === '_id' && is_string($value)) {
                 $doc[$i] = $this->toMongoRef();
@@ -82,8 +78,21 @@ abstract class Entity extends BaseEntity {
                     }
                     continue;
                 }
-                if (is_callable($transform)) {
-                    $doc[$i] = $transform($value);
+                if ($transform === 'datetime') {
+                    if (is_string($value)) {
+                        $value = DateTime::createFromFormat('Y-m-d H:i:s', $value);
+                    }
+                    $doc[$i] = new UTCDateTime($value->getTimestamp() . '000');
+                    continue;
+                }
+                if (is_string($transform)) {
+                    $transforms = explode('|', $transform);
+                    foreach ($transforms as $t) {
+                        if (is_callable($t)) {
+                            $value = $t($value);
+                        }
+                    }
+                    $doc[$i] = $value;
                     continue;
                 }
             }

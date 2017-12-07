@@ -40,10 +40,9 @@ class Renderer {
      * @return self
      */
     public function withErrors(MessageBag $errors) {
-        $this->plates->addData([
+        return $this->with([
             'errors' => $errors,
         ]);
-        return $this;
     }
 
     /**
@@ -51,9 +50,18 @@ class Renderer {
      * @return self
      */
     public function withSession(Session $session) {
-        $this->plates->addData([
+        return $this->with([
             'session' => $session,
         ]);
+    }
+
+    /**
+     * Set global view variables
+     * @param  array $data
+     * @return self
+     */
+    public function with($data = []) {
+        $this->plates->addData($data);
         return $this;
     }
 
